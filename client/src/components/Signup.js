@@ -107,7 +107,7 @@ const Signup = () => {
   const PostData = async () => {
     const { role, name, email, phone, address, password, cpassword } = values;
 
-    const res = await fetch("/signup", {
+    const res = await fetch("http://localhost:5050/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -122,7 +122,7 @@ const Signup = () => {
         cpassword,
       }),
     });
-    await res.json();
+    console.log(res);
     if (res.status === 422) {
       toast.error("Failed to Register", {
         position: toast.POSITION.TOP_CENTER,

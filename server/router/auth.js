@@ -99,6 +99,7 @@ router.post("/signin", async (req, res) => {
       res.status(400).json({ error: "Invalid Credentials" });
     }
   } catch (err) {
+    console.log("Err is heres");
     console.log(err);
   }
 });
@@ -306,8 +307,11 @@ router.post("/employeeassign", async (req, res) => {
 // Show Status
 router.post("/displaystatus", async (req, res) => {
   try {
-    const { id } = req.body;
+    const id = req.body.id;
+    console.log(id);
     const status = await Item.findOne({ _id: id });
+
+    console.log(status)
     const st = status.statuses;
     if (st.length == 1) {
       res.json({ message: "Initiated" });
@@ -315,8 +319,11 @@ router.post("/displaystatus", async (req, res) => {
       res.status(201).json({ message: "Food picked from Restraunt" });
     } else if (st.length == 3) {
       res.status(202).json({ message: "Food Donated to Needy" });
-    } else if (st.length == 4) {
+    } else if (st.length >= 4) {
       res.status(203).json({ message: "Completed!" });
+    }
+    else{
+      res.json({message:"No status available"})
     }
   } catch (error) {
     console.log(error);

@@ -50,7 +50,7 @@ const Signin = () => {
   const loginUser = async (e) => {
     const { phone, password } = values;
 
-    const res = await fetch("/signin", {
+    const res = await fetch("http://localhost:5050/signin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,7 +60,7 @@ const Signin = () => {
         password,
       }),
     });
-
+    console.log(res);
     await res.json();
     if (res.status === 428) {
       toast.warning("Please fill data", {
@@ -99,6 +99,9 @@ const Signin = () => {
       });
       Navigate("/employee");
     }
+    // console.log("Login btn clicked");
+    // const res=await fetch('http://localhost:5050/');
+    // console.log(ans);
   };
 
   return (

@@ -4,8 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Link } from "react-router-dom";
 
 // Images Import
-import img1 from "../images/carousel-1.jpg";
-import img2 from "../images/carousel-2.jpg";
+import img1 from "../images/carousel-5.jpg";
+import img2 from "../images/carousel-4.jpg";
 import img3 from "../images/carousel-3.jpg";
 
 const Home = () => {
@@ -41,8 +41,7 @@ const Home = () => {
           <div className="card-body">
             <h5 className="card-title">Request Donation</h5>
             <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
+              You can request for a donation by clicking on the below button
             </p>
             <Link className="btn btn-primary" to={"/RequestDonationModal"}>
               Request
@@ -53,8 +52,7 @@ const Home = () => {
           <div className="card-body">
             <h5 className="card-title">Confirm Donation</h5>
             <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
+              Please click on confirm button for confirming donation.
             </p>
             <Link className="btn btn-primary" to={"/ConfirmDonation"}>
               Confirm
@@ -65,26 +63,14 @@ const Home = () => {
           <div className="card-body">
             <h5 className="card-title">Donation-In-Progress</h5>
             <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
+              Click the below button for viewing ongoing donations.
             </p>
             <Link className="btn btn-primary" to={"/ongoingdonation"}>
               Ongoing Donations
             </Link>
           </div>
         </div>
-        <div className="card" style={{ width: "18rem" }}>
-          <div className="card-body">
-            <h5 className="card-title">Donation Status</h5>
-            <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-            <Link className="btn btn-primary" to={"/ongoingdonation"}>
-              Status
-            </Link>
-          </div>
-        </div>
+        
       </div>
     </>
   );

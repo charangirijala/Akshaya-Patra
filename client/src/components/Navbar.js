@@ -83,7 +83,7 @@ const Navbar = () => {
         <div className="container-fluid">
           <NavLink className="navbar-brand" to="#">
             <img className="logo" src={logo} alt="Logo" />
-            {" "}अन्नदान
+            {" "}అక్షయ పాత్ర
           </NavLink>
           <button
             className="navbar-toggler"

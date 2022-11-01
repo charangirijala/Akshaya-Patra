@@ -7,31 +7,33 @@ const Signout = () => {
 
   const Navigate = useNavigate();
   useEffect(() => {
-    fetch("/signout", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
-      .then((res) => {
-        dispatch({ type: "USER", payload: false });
-        Navigate("/signin", { replace: true });
-        if (!res.status === 200) {
-          const error = new Error(res.error);
-          throw error;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // fetch("http://localhost:5050/signout", {
+    //   method: "GET",
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    //   credentials: "include",
+    // })
+    //   .then((res) => {
+    //     dispatch({ type: "USER", payload: false });
+    //     Navigate("/signin", { replace: true });
+    //     if (!res.status === 200) {
+    //       const error = new Error(res.error);
+    //       throw error;
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    dispatch({ type: "USER", payload: false });
+    Navigate("/signin", { replace: true });
   });
-
+  
   return (
-    <>
-      <h1>Logout</h1>
-    </>
+    <div>
+      <h1>See you next time...</h1>
+    </div>
   );
 };
 

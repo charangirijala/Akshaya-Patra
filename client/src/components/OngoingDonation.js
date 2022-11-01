@@ -45,6 +45,7 @@ const OngoingDonation = (props) => {
       }),
     });
     await res.json();
+    console.log("res");
     Navigate("/showstatus", { state: { status: res.status, _id: id } });
   };
 

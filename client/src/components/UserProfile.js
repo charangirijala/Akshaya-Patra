@@ -35,7 +35,7 @@ const UserProfile = () => {
   }
   const callUserDetails = async () => {
     try {
-      const res = await fetch("/getdata", {
+      const res = await fetch("http:localhost:5050/getdata", {
         method: "GET",
         headers: {
           Accept: "application/json",
