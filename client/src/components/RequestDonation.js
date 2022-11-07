@@ -3,13 +3,15 @@ import FormInput from "./FormInput";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Autocomplete } from '@react-google-maps/api';
+
 toast.configure();
 
 const RequestDonation = () => {
   const Navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
-    address: "",
+    ngoaddress: "",
     phone: "",
     addinfo: "",
   });
@@ -110,6 +112,7 @@ const RequestDonation = () => {
             onChange={onChange}
           />
         ))}
+        
         <button
           disabled={
             !values.name.match(namepattern) ||

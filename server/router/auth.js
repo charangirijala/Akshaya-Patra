@@ -6,10 +6,14 @@ const jwt = require("jsonwebtoken");
 const authenticate = require("../middleware/authenticate");
 const cookieParser = require("cookie-parser");
 var cors = require("cors");
+const qrcode = require('qrcode-terminal');
+const { Client, LocalAuth } = require('whatsapp-web.js');
+
 
 router.use(cors());
 router.use(cookieParser());
 router.use(express.urlencoded());
+
 
 // DB Connection
 require("../db/conn");
@@ -20,6 +24,11 @@ const Request = require("../model/requestFood");
 const Item = require("../model/fooditem");
 const Blog = require("../model/blog");
 
+
+//whatsapp connection
+
+
+
 // Home Page
 router.get("/", (req, res) => {
   res.send(`Hello, Welcome to Home Page`);
@@ -27,7 +36,7 @@ router.get("/", (req, res) => {
 
 // Signup Page
 router.post("/signup", async (req, res) => {
-  const { role, name, email, phone, address, password, cpassword } = req.body;
+  const { role, name, email, phone, address, password, cpassword ,location} = req.body;
   if (!name || !email || !phone || !address || !password || !cpassword) {
     return res.status(428).json({ error: "Required Field" });
   }
@@ -49,6 +58,7 @@ router.post("/signup", async (req, res) => {
         address,
         password,
         cpassword,
+        location
       });
 
       const token = await register.generateAuthToken();
@@ -298,6 +308,23 @@ router.post("/employeeassign", async (req, res) => {
       await assignemp.assign(name, phone);
       await assignemp.save();
       res.status(201).json({ message: "Employee Assigned" });
+      var phno="91"+phone+"@c.us";
+      var msg=`Hi! ${name}, you have been assigned a delivery. Please login to the website to know more..`
+      const client = new Client({
+        authStrategy: new LocalAuth()
+      });
+      
+      client.on('qr', qr => {
+          qrcode.generate(qr, {small: true});
+      });
+      
+      client.on('ready', () => {
+        console.log('Client is ready!');
+        client.sendMessage(phno,msg);
+        console.log('Message sent successfully');
+
+      });
+      client.initialize();
     }
   } catch (error) {
     console.log(error);

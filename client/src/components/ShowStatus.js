@@ -1,17 +1,62 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import {GoogleMap, useJsApiLoader,Marker,Autocomplete,LoadScript,DirectionsRenderer} from '@react-google-maps/api'
+
+const center = {
+  lat: 17.3871,
+  lng: 78.4916
+};
+const containerStyle = {
+  width: '40rem',
+  height: '40rem'
+};
+const libraries = ['places']
 
 const ShowStatus = (props) => {
   const { state } = useLocation();
   const id = state._id;
   const [employee, setEmployee] = useState([]);
   const [message, setMessage] = useState('');
+  const [direcRes,setdirecRes]=useState(null)
+  const [dist,setdist]=useState('')
+  const [duration,setduration]=useState('')
+  const originRef=useRef()
+  const destRef=useRef()
+  // const {isLoaded}=useJsApiLoader({
+  //   googleMapsApiKey:"AIzaSyBaZ4Du0AXqaawvDmHm3lMtkIlYgERGZyI",
+  //   libraries,
+  // })
+  // if(!isLoaded){
+  //   console.log("Maps is loading..")
+  // }
   //console.log(state)
+  async function calculateRoute() {
+    if (originRef.current.value === '' || destRef.current.value === '') {
+      return
+    }
+    console.log(originRef.current.value)
+    console.log(destRef.current.value)
+    //eslint-disable-next-line no-undef
+    const directionsService = new google.maps.DirectionsService()
+    const results = await directionsService.route({
+      origin: originRef.current.value,
+      destination: destRef.current.value,
+      // eslint-disable-next-line no-undef
+      travelMode: google.maps.TravelMode.DRIVING,
+    })
+    setdirecRes(results)
+    setdist(results.routes[0].legs[0].distance.text)
+    setduration(results.routes[0].legs[0].duration.text)
+  }
   const employeedetails = async () => {
     try {
       const res = await fetch("/dispstatus", {
@@ -140,19 +185,50 @@ const ShowStatus = (props) => {
   });
   console.log(dispemployeename);
   return (
-    <div className="app">
-      <div className="empdetail">
+    
+    <div >
+      <Container>
+      <Row>
+        <Col>
         <h1>Assigned Employee</h1>
         <h5>Name: {dispemployeename}</h5>
-              <h5>Phone: {dispemployeephone}</h5>
-        {/* {dispemployeename?(<h3>No employee assigned yet</h3>):(<div>
-              <h5>Name: {dispemployeename}</h5>
-              <h5>Phone: {dispemployeephone}</h5>
-          </div>)} */}
-      </div>
-      <div>
-              
-          </div>
+        <h5>Phone:{dispemployeephone}</h5></Col>
+        <Col>
+          <h1>Track the location here</h1>
+          <Row>
+          <Form>
+            <Form.Group className="mb-3">
+               <Form.Label>Source</Form.Label>
+            <Autocomplete>
+            <Form.Control type="text" placeholder="Enter source" ref={originRef} />
+            </Autocomplete>
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Label>Destination</Form.Label>
+         <Autocomplete>
+         <Form.Control type="text" placeholder="Enter destination" ref={destRef}/>
+        </Autocomplete>
+      </Form.Group>
+      <Button variant="primary" type="button" onClick={calculateRoute}>
+        Submit</Button>
+      <h3>Distance:{dist}</h3>
+      <h3>duration:{duration}</h3>
+    </Form>
+          </Row>
+          <Row>
+            <Col>
+            {/* <LoadScript googleMapsApiKey="AIzaSyDm4naL49yGJOMekRVU1IipSUrwgTA3piM"  libraries={["places"]} > */}
+            <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
+              <Marker position={center}></Marker>
+              {direcRes && <DirectionsRenderer directions={direcRes}/>}
+            </GoogleMap>
+            {/* </LoadScript> */}
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Container>
       <div className="statusdetail">
         <h1>Status</h1>
         {(() => {

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from "react";
 import FormInput from "./FormInput";
 import { useNavigate } from "react-router-dom";
-
+import Form from 'react-bootstrap/Form';
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -11,6 +11,7 @@ import Select from "@mui/material/Select";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Autocomplete } from '@react-google-maps/api';
 toast.configure();
 
 const Signup = () => {
@@ -24,6 +25,7 @@ const Signup = () => {
     address: "",
     password: "",
     cpassword: "",
+    location:""
   });
   const emailpattern = "[a-z0-9._%+-]+@[Gg][Mm][Aa][Ii][Ll]+.com$";
   const namepattern = "^[A-Za-z A-Za-z]{3,16}$";
@@ -101,12 +103,12 @@ const Signup = () => {
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
+  
 
   // Connecting DB
 
   const PostData = async () => {
-    const { role, name, email, phone, address, password, cpassword } = values;
-
+    const { role, name, email, phone, address, password, cpassword,location} = values;
     const res = await fetch("http://localhost:5050/signup", {
       method: "POST",
       headers: {
@@ -120,6 +122,7 @@ const Signup = () => {
         address,
         password,
         cpassword,
+        location
       }),
     });
     console.log(res);
@@ -174,6 +177,10 @@ const Signup = () => {
             onChange={onChange}
           />
         ))}
+  
+        <Autocomplete>
+          <FormInput onChange={onChange} type="text" name="location" label="Enter Location"/>
+        </Autocomplete>
         <button
           disabled={
             !values.email.match(emailpattern) ||
