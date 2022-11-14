@@ -36,7 +36,7 @@ router.get("/", (req, res) => {
 
 // Signup Page
 router.post("/signup", async (req, res) => {
-  const { role, name, email, phone, address, password, cpassword ,location} = req.body;
+  const { role, name, email, phone, address, password, cpassword} = req.body;
   if (!name || !email || !phone || !address || !password || !cpassword) {
     return res.status(428).json({ error: "Required Field" });
   }
@@ -58,7 +58,6 @@ router.post("/signup", async (req, res) => {
         address,
         password,
         cpassword,
-        location
       });
 
       const token = await register.generateAuthToken();
@@ -114,6 +113,15 @@ router.post("/signin", async (req, res) => {
   }
 });
 
+//get all users
+router.get("/getallemployees",async(req,res)=>{
+  const empData = await (await Register.find()).filter(function(e){
+    return e.role=="3";
+  });
+  
+  res.json({employees:empData});
+})
+
 // Update User Profile
 router.post("/updateprofile", authenticate, async (req, res) => {
   const user = await Register.findById(req.rootUser);
@@ -146,15 +154,15 @@ router.get("/getdata", authenticate, (req, res) => {
 // Request Page
 router.post("/requestdonation", async (req, res) => {
   try {
-    const { name, address, phone, addinfo } = req.body;
+    const { name,phone, addinfo ,ngoaddress} = req.body;
     if (!addinfo) {
       res.status(428).json({ error: "Please fill data" });
     } else {
       const requestFood = new Request({
         name,
-        address,
         phone,
         addinfo,
+        ngoaddress
       });
       await requestFood.save();
       res.status(201).json({ message: "request sent" });
@@ -247,8 +255,8 @@ router.get("/getblog", async (req, res) => {
 // Items Page
 router.post("/fooditem", async (req, res) => {
   try {
-    const { name, address, phone, items } = req.body;
-    if (!name || !address || !phone || !items) {
+    const { name, address, phone, items ,ngoaddress} = req.body;
+    if (!name || !address || !phone || !items ||!ngoaddress) {
       res.status(428).json({ error: "Please fill data" });
     } else {
       const ItemDetails = new Item({
@@ -256,6 +264,7 @@ router.post("/fooditem", async (req, res) => {
         address,
         phone,
         items,
+        ngoaddress
       });
       await ItemDetails.save();
       res.status(201).json({ message: "Request Confirmed" });

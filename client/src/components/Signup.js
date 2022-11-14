@@ -11,7 +11,6 @@ import Select from "@mui/material/Select";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Autocomplete } from '@react-google-maps/api';
 toast.configure();
 
 const Signup = () => {
@@ -108,7 +107,7 @@ const Signup = () => {
   // Connecting DB
 
   const PostData = async () => {
-    const { role, name, email, phone, address, password, cpassword,location} = values;
+    const { role, name, email, phone, address, password, cpassword} = values;
     const res = await fetch("http://localhost:5050/signup", {
       method: "POST",
       headers: {
@@ -122,7 +121,6 @@ const Signup = () => {
         address,
         password,
         cpassword,
-        location
       }),
     });
     console.log(res);
@@ -177,10 +175,6 @@ const Signup = () => {
             onChange={onChange}
           />
         ))}
-  
-        <Autocomplete>
-          <FormInput onChange={onChange} type="text" name="location" label="Enter Location"/>
-        </Autocomplete>
         <button
           disabled={
             !values.email.match(emailpattern) ||

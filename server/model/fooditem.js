@@ -17,6 +17,10 @@ const itemSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  ngoaddress:{
+    type:String,
+    required:true
+  },
   statuses: [
     {
       status: {

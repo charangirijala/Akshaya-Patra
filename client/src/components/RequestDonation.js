@@ -11,9 +11,9 @@ const RequestDonation = () => {
   const Navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
-    ngoaddress: "",
     phone: "",
     addinfo: "",
+    ngoaddress: "",
   });
 
   const namepattern = "^[A-Za-z A-Za-z]{3,16}$";
@@ -32,14 +32,6 @@ const RequestDonation = () => {
     },
     {
       id: 2,
-      name: "address",
-      type: "text",
-      placeholder: "Address",
-      label: "Address",
-      required: true,
-    },
-    {
-      id: 3,
       name: "phone",
       type: "tel",
       placeholder: "Phone Number",
@@ -49,12 +41,12 @@ const RequestDonation = () => {
       required: true,
     },
     {
-      id: 4,
+      id: 3,
       name: "addinfo",
       type: "text",
-      placeholder: "Any additional information here...",
+      placeholder: "Please add the list of food items",
       errorMessage: "Please enter Item Details",
-      label: "Additional Information",
+      label: "Food Items",
       required: true,
     },
   ];
@@ -68,8 +60,7 @@ const RequestDonation = () => {
   };
 
   const postData = async () => {
-    const { name, address, phone, addinfo } = values;
-
+    const { name, phone, addinfo ,ngoaddress} = values;
     const res = await fetch("/requestdonation", {
       method: "POST",
       headers: {
@@ -77,9 +68,9 @@ const RequestDonation = () => {
       },
       body: JSON.stringify({
         name,
-        address,
         phone,
         addinfo,
+        ngoaddress
       }),
     });
     await res.json();
@@ -112,7 +103,9 @@ const RequestDonation = () => {
             onChange={onChange}
           />
         ))}
-        
+        <Autocomplete>
+          <FormInput name="ngoaddress" onChange={onChange} label="Address" placeholder="Enter address"/>
+        </Autocomplete>
         <button
           disabled={
             !values.name.match(namepattern) ||

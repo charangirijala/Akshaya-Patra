@@ -14,6 +14,7 @@
   }
 }
 
+​
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -38,6 +39,9 @@
   }
 }
 
+.ui-autocomplete{
+  z-index: 1051 !important;
+}
 /* New */
 .formInput {
   display: flex;

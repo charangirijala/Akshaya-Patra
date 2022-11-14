@@ -5,10 +5,6 @@ const requestSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  address: {
-    type: String,
-    required: true,
-  },
   phone: {
     type: Number,
     required: true,
@@ -17,6 +13,10 @@ const requestSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  ngoaddress:{
+    type:String,
+    required:true
+  }
 });
 
 const Request = mongoose.model("REQUEST", requestSchema);

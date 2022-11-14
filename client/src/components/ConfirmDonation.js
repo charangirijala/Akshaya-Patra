@@ -4,7 +4,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CheckIcon from "@mui/icons-material/Check";
 import Stack from "@mui/material/Stack";
 import { useNavigate } from "react-router-dom";
-
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 toast.configure();
@@ -12,6 +11,8 @@ toast.configure();
 const ConfirmDonation = () => {
   const Navigate = useNavigate();
   const [requests, setRequests] = useState([]);
+  // const [address,setAddress]=useState("");
+  // const [reqid,setId]=useState("");
 
   const callConfirmPage = async () => {
     try {
@@ -32,6 +33,7 @@ const ConfirmDonation = () => {
 
   useEffect(() => {
     callConfirmPage();
+
   });
 
   const handleDelete = async (e) => {
@@ -56,9 +58,10 @@ const ConfirmDonation = () => {
     }
   };
 
-  const handleConfirm = async (e) => {
-    let id = e.currentTarget.id;
-    Navigate("/confirmdonationmodal", { state: id });
+  const handleConfirm = async (reqid,ngoaddress) => {
+    let id = reqid;
+    //console.log("confirm donation address"+ngoaddress)
+    Navigate("/confirmdonationmodal", { state: {id,ngoaddress}});
     const res = await fetch("/delete", {
       method: "POST",
       headers: {
@@ -82,7 +85,7 @@ const ConfirmDonation = () => {
     return (
       <tr key={i}>
         <td>{info.name}</td>
-        <td>{info.address}</td>
+        <td>{info.ngoaddress}</td>
         <td>{info.phone}</td>
         <td>{info.addinfo}</td>
         <td style={{ width: 0 }}>
@@ -92,7 +95,12 @@ const ConfirmDonation = () => {
               variant="contained"
               endIcon={<CheckIcon />}
               id={info._id}
-              onClick={handleConfirm}
+              onClick={()=>{
+                // setAddress(info.ngoaddress);
+                // setId(info._id)
+                // console.log("in call back func"+address)
+                handleConfirm(info._id,info.ngoaddress);
+              }}
             >
               Confirm
             </Button>

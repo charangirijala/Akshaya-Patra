@@ -8,8 +8,9 @@ const ConfirmDonationModal = () => {
   const [show, setShow] = useState(true);
   const handleClose = () => setShow(false);
   return (
-    <>
-      <Modal show={show} onHide={handleClose}>
+
+    <div className="app">
+    <Modal show={show} onHide={handleClose} style={{zIndex:1051}} >
         <Modal.Header closeButton onClick={Navigate("/ngohome")}>
           <Modal.Title>Request Donation...</Modal.Title>
         </Modal.Header>
@@ -17,7 +18,7 @@ const ConfirmDonationModal = () => {
           <RequestDonation />
         </Modal.Body>
       </Modal>
-    </>
+    </div>
   );
 };
 

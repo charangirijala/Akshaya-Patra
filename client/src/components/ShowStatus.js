@@ -29,8 +29,8 @@ const ShowStatus = (props) => {
   const [direcRes,setdirecRes]=useState(null)
   const [dist,setdist]=useState('')
   const [duration,setduration]=useState('')
-  const originRef=useRef()
-  const destRef=useRef()
+  const [originLoc,setOrigin]=useState('')
+  const [destLoc,setDest]=useState('')
   // const {isLoaded}=useJsApiLoader({
   //   googleMapsApiKey:"AIzaSyBaZ4Du0AXqaawvDmHm3lMtkIlYgERGZyI",
   //   libraries,
@@ -40,16 +40,15 @@ const ShowStatus = (props) => {
   // }
   //console.log(state)
   async function calculateRoute() {
-    if (originRef.current.value === '' || destRef.current.value === '') {
-      return
-    }
-    console.log(originRef.current.value)
-    console.log(destRef.current.value)
+    // if (originRef.current.value === '' || destRef.current.value === '') {
+    //   return
+    // }
+    console.log(originLoc)
     //eslint-disable-next-line no-undef
     const directionsService = new google.maps.DirectionsService()
     const results = await directionsService.route({
-      origin: originRef.current.value,
-      destination: destRef.current.value,
+      origin: originLoc,
+      destination: destLoc,
       // eslint-disable-next-line no-undef
       travelMode: google.maps.TravelMode.DRIVING,
     })
@@ -72,6 +71,8 @@ const ShowStatus = (props) => {
       });
       const data = await res.json();
       setEmployee(data);
+      setOrigin(data[0].address)
+      setDest(data[0].ngoaddress)
     } catch (err) {
       console.log(err);
     }
@@ -100,6 +101,7 @@ const ShowStatus = (props) => {
   useEffect(() => {
     employeedetails();
     getMessage();
+    calculateRoute();
   },[]);
   const steps = [
     `Donation has been accepted and initiated by ngo charity employee.`,
@@ -196,25 +198,10 @@ const ShowStatus = (props) => {
         <Col>
           <h1>Track the location here</h1>
           <Row>
-          <Form>
-            <Form.Group className="mb-3">
-               <Form.Label>Source</Form.Label>
-            <Autocomplete>
-            <Form.Control type="text" placeholder="Enter source" ref={originRef} />
-            </Autocomplete>
-      </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBasicPassword">
-        <Form.Label>Destination</Form.Label>
-         <Autocomplete>
-         <Form.Control type="text" placeholder="Enter destination" ref={destRef}/>
-        </Autocomplete>
-      </Form.Group>
       <Button variant="primary" type="button" onClick={calculateRoute}>
-        Submit</Button>
+        Show Distance</Button>
       <h3>Distance:{dist}</h3>
-      <h3>duration:{duration}</h3>
-    </Form>
+      <h3>Estimated Duration:{duration}</h3>
           </Row>
           <Row>
             <Col>

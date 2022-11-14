@@ -4,11 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Autocomplete } from "@react-google-maps/api";
 toast.configure();
 
 const ItemDetails = () => {
   const { state } = useLocation();
-  const ids = state;
+  const ids = state.id;
+  const ngoaddress=state.ngoaddress;
+  console.log(ids)
+  console.log("item details address"+ngoaddress)
   const Navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
@@ -34,14 +38,6 @@ const ItemDetails = () => {
     },
     {
       id: 2,
-      name: "address",
-      type: "text",
-      placeholder: "Address",
-      label: "Address",
-      required: true,
-    },
-    {
-      id: 3,
       name: "phone",
       type: "tel",
       placeholder: "Phone Number",
@@ -51,7 +47,7 @@ const ItemDetails = () => {
       required: true,
     },
     {
-      id: 4,
+      id: 3,
       name: "items",
       type: "text",
       placeholder: "Enter items here...",
@@ -70,7 +66,7 @@ const ItemDetails = () => {
   };
 
   const postData = async () => {
-    const { name, address, phone, items, id } = values;
+    const { name, phone, items,address, id } = values;
 
     const res = await fetch("/fooditem", {
       method: "POST",
@@ -79,9 +75,10 @@ const ItemDetails = () => {
       },
       body: JSON.stringify({
         name,
-        address,
         phone,
         items,
+        address,
+        ngoaddress
       }),
     });
     await res.json();
@@ -123,6 +120,9 @@ const ItemDetails = () => {
             onChange={onChange}
           />
         ))}
+        <Autocomplete>
+          <FormInput name="address" onChange={onChange} label="Address" placeholder="Enter address"/>
+        </Autocomplete> 
         <button
           disabled={
             !values.name.match(namepattern) || !values.phone.match(phonepattern)

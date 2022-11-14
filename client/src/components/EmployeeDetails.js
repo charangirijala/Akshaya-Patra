@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormInput from "./FormInput";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import "react-toastify/dist/ReactToastify.css";
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
+
+
 toast.configure();
 
 const EmployeeDetails = (props) => {
   const Navigate = useNavigate();
   const { state } = useLocation();
+  const [employees,setEmployees]=useState([]);
   const ids = state;
   const [values, setValues] = useState({
     name: "",
@@ -16,39 +23,15 @@ const EmployeeDetails = (props) => {
     id: ids,
   });
 
-  const namepattern = "^[A-Za-z A-Za-z]{3,16}$";
-  const phonepattern = "[0-9]{10}";
-
-  const inputs = [
-    {
-      id: 1,
-      name: "name",
-      type: "text",
-      placeholder: "Enter your Name...",
-      errorMessage: "Please enter your Name",
-      label: "Name",
-      pattern: "^[A-Za-z A-Za-z]{3,16}$",
-      required: true,
-    },
-    {
-      id: 3,
-      name: "phone",
-      type: "tel",
-      placeholder: "Phone Number",
-      errorMessage: "please enter valid phone number",
-      label: "Phone Number",
-      pattern: "[0-9]{10}",
-      required: true,
-    },
-  ];
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
+  
+  const getEmployeeData = async()=>{
+    const res=await fetch("/getallemployees",{
+      method:"GET",
+    })
+    const data=await res.json();
+    setEmployees(data.employees);
+    //console.log(data);
+  }
 
   const postData = async () => {
     const { name, phone, id } = values;
@@ -74,32 +57,40 @@ const EmployeeDetails = (props) => {
       Navigate("/ngohome")
     }
   };
-
+  const DisplayData=employees.map((info,i)=>{
+    return (
+      <tr>
+        <Container>
+        <Row>
+          <Col>
+          <td><h5>Name: {info.name}</h5>
+          <h5>Phone: {info.phone}</h5></td>
+          <hr></hr>
+          </Col>
+          <Col>
+            <Button data-value={info} variant="success" onClick={()=>{
+              values.name=info.name;
+              values.phone=info.phone;
+              postData();
+            }}>Assign</Button>
+          </Col>
+        </Row>
+        </Container>
+      </tr>
+    )
+  })
   return (
-    <div className="app">
-      <form className="request" onSubmit={handleSubmit}>
-        <h1>Assign Employee</h1>
-        {inputs.map((input) => (
-          <FormInput
-            key={input.id}
-            {...input}
-            name={input.name}
-            value={values[input.name]}
-            onChange={onChange}
-          />
-        ))}
-        <button
-          disabled={
-            !values.name.match(namepattern) ||
-            !values.phone.match(phonepattern)
-          }
-          id="sbtbtm"
-          className="buttonLR"
-          onClick={postData}
-        >
-          Submit
-        </button>
-      </form>
+    <div>
+      <div className="mb-2">
+      <Button onClick={getEmployeeData} variant="primary" >Get Details</Button></div>
+      <h3>List of Delivery Executives:</h3>
+      <table style={{width:'100%'}}>
+        <thead>
+        </thead>
+        <tbody>
+          {DisplayData}
+        </tbody>
+      </table>
     </div>
   );
 };
